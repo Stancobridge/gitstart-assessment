@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-   
+    #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
@@ -35,7 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $fullName = null;
 
 
-    #[ORM\Id]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 

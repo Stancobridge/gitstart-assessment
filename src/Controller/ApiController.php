@@ -1,34 +1,30 @@
 <?php
 
-// src/Controller/ApiController.php
 namespace App\Controller;
 
+use App\Exception\HttpValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validation;
 
 class ApiController extends AbstractController
 {
-  
-  public function transformResponse(Request $request, RateLimiterFactory $anonymousApiLimiter): Response
-  {
-    $limiter = $anonymousApiLimiter->create($request->getClientIp());
-    $limit = $limiter->consume();
-    $headers = [
-      'X-RateLimit-Remaining' => $limit->getRemainingTokens(),
-      'X-RateLimit-Retry-After' => $limit->getRetryAfter()->getTimestamp() - time(),
-      'X-RateLimit-Limit' => $limit->getLimit(),
-    ];
+  protected function transformResponse(
+    string $message,
+    $data = [],
+    int $statusCode = JsonResponse::HTTP_OK,
+    array $headers = []
+  ): JsonResponse {
 
-    if (false === $limit->isAccepted()) {
-      return new Response(null, Response::HTTP_TOO_MANY_REQUESTS, $headers);
-    }
+    $responseTimestamp = date('Y-m-d H:i:s');
 
-    $response = new JsonResponse();
-    $response->headers->add($headers);
-
-    return $response;
+    return new JsonResponse([
+      'message' => $message,
+      'statusCode' => $statusCode,
+      'data' => $data,
+      'timestamp' => $responseTimestamp
+    ], $statusCode, $headers);
   }
 }
