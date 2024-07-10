@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Table(name: '`products`')]
 #[HasLifecycleCallbacks]
 class Product
 {
@@ -22,8 +23,6 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 14, scale: 4)]
     public ?string $price = null;
 
-    #[ORM\Column(length: 255)]
-    public ?string $imageUrl = null;
 
     #[ORM\Column(type: Types::TEXT)]
     public ?string $description = null;
@@ -59,18 +58,6 @@ class Product
     public function setPrice(string $price): static
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getImageUrl(): ?string
-    {
-        return $this->imageUrl;
-    }
-
-    public function setImageUrl(string $imageUrl): static
-    {
-        $this->imageUrl = $imageUrl;
 
         return $this;
     }

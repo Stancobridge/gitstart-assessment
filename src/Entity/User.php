@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[ORM\Table(name: '`users`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_ID', fields: ['id', 'email'])]
 #[HasLifecycleCallbacks]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -17,7 +17,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     /**
      * @var list<string> The user roles
@@ -32,11 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $fullName = null;
+    public ?string $fullName = null;
 
 
     #[ORM\Column(length: 255, unique: true)]
-    private ?string $email = null;
+    public ?string $email = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;

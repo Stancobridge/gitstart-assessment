@@ -9,7 +9,6 @@ use App\Exception\InternalServerHttpException;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductService
@@ -22,26 +21,17 @@ class ProductService
   ) {
   }
 
-  public function create(CreateProductDto $createProductDto, UploadedFile $productPhoto)
+  public function create(CreateProductDto $createProductDto)
   {
     try {
 
       $this->entityManager->beginTransaction();
-
-      $fileName = uniqid() . '.' . $productPhoto->guessExtension();
-      $photoDir = '/products';
-
-      $productPhoto->move(
-        $this->uploadDirectory . $photoDir,
-        $fileName
-      );
 
       $product = new Product();
 
       $product->setName($createProductDto->name);
       $product->setPrice((float)$createProductDto->price);
       $product->setDescription($createProductDto->description);
-      $product->setImageUrl($photoDir . '/' . $fileName);
 
       $this->entityManager->persist($product);
       $this->entityManager->flush();
@@ -62,11 +52,18 @@ class ProductService
 
   public function edit(int $id, EditProductDto $editProductDto)
   {
+    $product = $this->productRepository->find($id);
+
+    if (!$product) {
+      throw new NotFoundHttpException('Product not found');
+    }
+
     try {
 
       $this->entityManager->beginTransaction();
 
-      $product = $this->productRepository->find($id);
+
+
 
       $product->setName($editProductDto->name ?? $product->name);
       $product->setPrice((float)($editProductDto->price ?? $product->price));
@@ -100,13 +97,7 @@ class ProductService
 
   public function findAll()
   {
-    $product = $this->productRepository->findAll();
-
-    if (!$product) {
-      throw new NotFoundHttpException('Product not found');
-    }
-
-    return $product;
+    return $this->productRepository->findAll();
   }
 
   public function remove($id)

@@ -25,6 +25,6 @@ class RegistrationController extends ApiController
 
     $registeredUser = $this->registrationService->createUser($registerUserDto);
 
-    return $this->transformResponse('Account created successfully', $registeredUser);
+    return $this->transformResponse('Account created successfully', $registeredUser, JsonResponse::HTTP_CREATED);
   }
 }
