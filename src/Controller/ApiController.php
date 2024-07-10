@@ -2,12 +2,8 @@
 
 namespace App\Controller;
 
-use App\Exception\HttpValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validation;
 
 class ApiController extends AbstractController
 {

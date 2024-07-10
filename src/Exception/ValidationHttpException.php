@@ -5,7 +5,7 @@ namespace App\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class HttpValidationException extends HttpException
+class ValidationHttpException extends HttpException
 {
   private $errorData;
 

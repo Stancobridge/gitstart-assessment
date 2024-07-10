@@ -4,7 +4,7 @@ namespace App\EventListener;
 
 use ReflectionClass;
 
-use App\Exception\HttpValidationException;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -32,10 +32,6 @@ class JsonExceptionListener
       'timestamp' => $errorTimestamp,
       'type' => $exceptionClassName
     ];
-
-    if ($exception instanceof HttpValidationException) {
-      $errorResponseData['errors'] = $exception->getErrorData();
-    }
 
     if ($exception instanceof UnprocessableEntityHttpException) {
 

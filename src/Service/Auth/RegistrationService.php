@@ -4,12 +4,13 @@ namespace App\Service\Auth;
 
 use App\Dto\RegisterUserDto;
 use App\Entity\User;
+use App\Enum\Role;
+use App\Exception\InternalServerHttpException;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class RegistrationService
@@ -26,6 +27,10 @@ class RegistrationService
 
   public function createUser(RegisterUserDto $userDto)
   {
+
+    $this->throwIfUserAlreadyExists($userDto->email);
+
+
     $this->entityManager->beginTransaction();
 
     $user = new User();
@@ -42,6 +47,14 @@ class RegistrationService
       $user->setFullName($userDto->fullName);
       $user->setPassword($hashedPassword);
 
+
+      // check if admin already exist
+      $adminUser = $this->userRepository->findOneBy([]);
+
+      if (!$adminUser) {
+        $user->setRoles([Role::ADMIN]);
+      }
+
       $this->entityManager->persist($user);
       $this->entityManager->flush();
 
@@ -54,10 +67,20 @@ class RegistrationService
       $this->entityManager->rollback();
       $this->loggerInterface->error($e->getMessage());
 
-      throw new \Exception('An error occurred while creating your account, try again or contact support');
+      throw new InternalServerHttpException('An error occurred while creating your account, try again or contact support');
     }
 
 
     return ['auth_token' => $authToken, 'user' => $user];
+  }
+
+  private function throwIfUserAlreadyExists($userEmail)
+  {
+    // make sure user with same email does not exist
+    $oldUser = $this->userRepository->findOneBy(['email' => $userEmail]);
+
+    if ($oldUser) {
+      throw new ConflictHttpException('User with same email already exist');
+    }
   }
 }
