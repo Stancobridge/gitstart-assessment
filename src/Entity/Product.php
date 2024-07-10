@@ -14,25 +14,25 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    public ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 14, scale: 4)]
-    private ?string $price = null;
+    public ?string $price = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $imageUrl = null;
+    public ?string $imageUrl = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
+    public ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $createdAt = null;
+    public ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-    private ?\DateTimeImmutable $updatedAt = null;
+    public ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -123,5 +123,4 @@ class Product
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
-
 }

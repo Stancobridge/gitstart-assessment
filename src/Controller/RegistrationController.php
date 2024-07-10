@@ -18,7 +18,7 @@ class RegistrationController extends ApiController
   }
 
 
-  #[Route('/register', name: 'register', methods: ['HEAD', 'POST'])]
+  #[Route('/register', name: 'register', methods: ['POST'])]
   public function createUser(
     #[MapRequestPayload] RegisterUserDto $registerUserDto,
   ): JsonResponse {
