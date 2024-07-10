@@ -52,7 +52,7 @@ class RegistrationService
       $adminUser = $this->userRepository->findOneBy([]);
 
       if (!$adminUser) {
-        $user->setRoles([Role::ADMIN]);
+        $user->setRoles([Role::ROLE_ADMIN]);
       }
 
       $this->entityManager->persist($user);

@@ -14,6 +14,7 @@ class CreateProductDto
 
   #[
     Assert\NotBlank(message: 'Price is required'),
+    Assert\Type(message: 'Price must be a number', type: 'numeric'),
     Assert\Positive(message: 'Price must be a positive number'),
   ]
   public string $price;
@@ -22,6 +23,14 @@ class CreateProductDto
   public string $description;
 
 
-  #[Assert\Image(message: 'Image is required', maxSize: '4096k' /** 4MB */)]
+  #[
+
+    Assert\Image(
+      maxSize: '4096k'
+      /** 4MB */
+      ,
+      maxSizeMessage: 'Product photo size must not exceed 4mb'
+    )
+  ]
   public string $photo;
 }

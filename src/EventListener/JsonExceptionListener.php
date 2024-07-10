@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Exception\ValidationHttpException;
 use ReflectionClass;
 
 
@@ -32,6 +33,10 @@ class JsonExceptionListener
       'timestamp' => $errorTimestamp,
       'type' => $exceptionClassName
     ];
+
+    if ($exception instanceof ValidationHttpException) {
+      $errorResponseData['errors'] = $exception->getErrorData();
+    }
 
     if ($exception instanceof UnprocessableEntityHttpException) {
 
