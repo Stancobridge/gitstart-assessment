@@ -50,12 +50,6 @@ create database
 php bin/console doctrine:database:create
 ```
 
-create migration
-
-```sh
-php bin/console make:migration
-```
-
 run migration
 
 ```sh
