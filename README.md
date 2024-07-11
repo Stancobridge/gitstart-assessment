@@ -3,6 +3,27 @@
 > This project is a simple Symfony REST API server for product CRUD and the authentication using JWT.
 > The REST API allows user to register, login and manager products through CRUD endpoints. The Documentation below explains how to run and test the project
 
+## Architectural Overview
+This project is built with Symfony PHP Framework.
+The design patterns used are based on the Symfony framework though I made some changes to few parts of the setup.
+Most of the work was done in the ``src`` folder with the setup below
+```markdown
+- src/                       | Source code directory containing application logic
+  ├── Controller/            | Symfony controllers handling HTTP requests
+  ├── DataFixtures/          | Symfony data fixtures handling seeding of dummy data to the database
+  ├── Dto/                   | Dto directoru I created to hold all the request validation DTO
+  ├── Entity/                | Doctrine entities representing database tables
+  ├── Enum/                  | Enum directory I created to store all enums used in the project
+  ├── EventListener/         | Event listeners and subscribers for handling Symfony events
+  ├── Exception/             | Exception directory used to store all the custom exceptions created
+  ├── Repository/            | Doctrine repositories for database query and manipulation
+  ├── Service/               | Services implementing business logic or utilities
+  ├── Kernel.php             | Symfony kernel class handling application bootstrapping
+  └──/
+```
+Inside the ``Controller`` folder I created an ``ApiController.php`` file which contains an ``ApiController`` class of base ApiController implementation that extends ``AbstractController`` from Symfony. With this am able to setup simple response transformation system that is reusable across the Controller, so each controller has to extend to ``ApiController`` instead of the ``AbstractController``
+
+
 ## Assummption made during development
 
 Only the first user has ROLE_ADMIN role, which the role of the user who can create, edit and delete products.
