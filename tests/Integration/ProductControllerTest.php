@@ -3,6 +3,7 @@
 namespace App\Test\Integration;
 
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -46,7 +47,7 @@ class ProductControllerTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ],
             json_encode([
                 'name' => 'Gucci Black Jeans',
@@ -76,7 +77,7 @@ class ProductControllerTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ],
             json_encode([
                 'name' => '',
@@ -102,12 +103,12 @@ class ProductControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            '/api/products/'.$product->getId(),
+            '/api/products/' . $product->getId(),
             [],
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ],
             json_encode([
                 'name' => 'Turkey Eggs',
@@ -136,7 +137,7 @@ class ProductControllerTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ],
             json_encode([
                 'name' => 'Turkey Eggs',
@@ -159,12 +160,12 @@ class ProductControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            '/api/products/'.$product->getId(),
+            '/api/products/' . $product->getId(),
             [],
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ]
         );
 
@@ -189,7 +190,62 @@ class ProductControllerTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
+            ]
+        );
+
+        $this->assertEquals(JsonResponse::HTTP_NOT_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertJson($this->client->getResponse()->getContent());
+
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('message', $responseContent);
+        $this->assertEquals('Product not found', $responseContent['message']);
+    }
+
+    public function testDeleteProduct(): void
+    {
+        $productRepository = static::getContainer()->get(ProductRepository::class);
+        $oldProducts = $productRepository->findAll();
+
+        $token = $this->getAuthToken();
+        $product = $this->createProduct();
+
+        $this->client->request(
+            'DELETE',
+            '/api/products/' . $product->getId(),
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => self::APPLICATION_JSON,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
+            ]
+        );
+
+        $this->assertEquals(JsonResponse::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertJson($this->client->getResponse()->getContent());
+
+        $newProducts = $productRepository->findAll();
+
+        $responseContent = json_decode($this->client->getResponse()->getContent(), true);
+        $this->assertArrayHasKey('message', $responseContent);
+        $this->assertArrayHasKey('data', $responseContent);
+        $this->assertEquals(true, $responseContent['data']);
+        $this->assertEquals('Product deleted successfully', $responseContent['message']);
+        $this->assertEquals(count($oldProducts), count($newProducts));
+    }
+
+    public function testDeleteProductValidation(): void
+    {
+        $token = $this->getAuthToken();
+
+        $this->client->request(
+            'DELETE',
+            '/api/products/1',
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => self::APPLICATION_JSON,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ]
         );
 
@@ -212,7 +268,7 @@ class ProductControllerTest extends WebTestCase
             [],
             [
                 'CONTENT_TYPE' => self::APPLICATION_JSON,
-                'HTTP_AUTHORIZATION' => 'Bearer '.$token,
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ]
         );
 
