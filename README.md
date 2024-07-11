@@ -26,8 +26,8 @@ Inside the ``Controller`` folder I created an ``ApiController.php`` file which c
 
 ## Assumption made during development
 
-Only the first user has ROLE_ADMIN role, which the role of the user who can create, edit and delete products.
-Any user created after the first one won't have this role and call only view products
+Only the first user created will have ROLE_ADMIN role, which is the role of the user who can create, edit and delete products.
+Any other user created after the first one won't have this role and can only call the view products endpoints.
 
 ### Local setup
 
