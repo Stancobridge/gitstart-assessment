@@ -24,7 +24,7 @@ Most of the work was done in the ``src`` folder with the setup below
 Inside the ``Controller`` folder I created an ``ApiController.php`` file which contains an ``ApiController`` class of base ApiController implementation that extends ``AbstractController`` from Symfony. With this am able to setup simple response transformation system that is reusable across the Controller, so each controller has to extend to ``ApiController`` instead of the ``AbstractController``
 
 
-## Assummption made during development
+## Assumption made during development
 
 Only the first user has ROLE_ADMIN role, which the role of the user who can create, edit and delete products.
 Any user created after the first one won't have this role and call only view products
