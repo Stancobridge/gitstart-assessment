@@ -1,0 +1,27 @@
+#docker-compose.yml
+version: "3"
+
+services:
+    php:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ./app:/var/www/html
+
+    nginx:
+        build: ./docker/nginx
+        ports:
+            - "8080:80"
+        volumes:
+            - ./app:/var/www/html
+            - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+
+    db:
+        image: mysql:8.0.33
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: symfony
+            MYSQL_USER: symfony
+            MYSQL_PASSWORD: secret
+
