@@ -1,8 +1,10 @@
 ## Documentation on how to setup this project
+
 > This project is a simple Symfony REST API server for product CRUD and the authentication using JWT.
 > The REST API allows user to register, login and manager products through CRUD endpoints. The Documentation below explains how to run and test the project
 
 ## Assummption made during development
+
 Only the first user has ROLE_ADMIN role, which the role of the user who can create, edit and delete products.
 Any user created after the first one won't have this role and call only view products
 
@@ -59,10 +61,24 @@ run migration
 php bin/console doctrine:migrations:migrate
 ```
 
-
 #### Start server
 
-### Docker setup
+## Docker setup
+
+Build project
+
+```sh
+ docker compose -f ./docker-compose.yml up --build
+```
+
+Migrate database
+
+```sh
+docker exec -it gitstart-assessment-web-1 php bin/console doctrine:migrations:migrate
+```
+When asked enter "yes" without the quote
+
+You can access the docker endpoint from http://localhost:8080
 
 ## Test Documentation
 
