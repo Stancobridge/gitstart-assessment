@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test;
+namespace App\Test\Integration;
 
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;

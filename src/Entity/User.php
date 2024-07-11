@@ -39,17 +39,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $email = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    public ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    public ?\DateTimeImmutable $createdAt = null;
 
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId(string $id): static
+    public function setId(int $id): static
     {
         $this->id = $id;
 
@@ -95,7 +95,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getPassword(): string
     {
-        return $this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): static

@@ -17,14 +17,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProductController extends ApiController
 {
 
-  /**
-   * __construct
-   *
-   * @param  mixed $productService
-   * @param  mixed $validatorInterface
-   * @return void
-   */
-  public function __construct(private readonly ProductService $productService, private readonly ValidatorInterface $validatorInterface)
+
+  public function __construct(private readonly ProductService $productService)
   {
   }
 
@@ -42,7 +36,7 @@ class ProductController extends ApiController
   #[IsGranted('ROLE_ADMIN', message: 'You are not permitted to perform this action'), IsGranted('IS_AUTHENTICATED_FULLY')]
   #[Route('/{productId}', name: 'edit_product', methods: ['PUT'])]
   public function edit(
-    $productId,
+    int | string  $productId,
     #[MapRequestPayload()] EditProductDto $editProductDto,
   ): JsonResponse {
 
@@ -53,7 +47,7 @@ class ProductController extends ApiController
   #[IsGranted('IS_AUTHENTICATED_FULLY')]
   #[Route('/{productId}', name: 'fetch_one_product', methods: ['GET'])]
   public function findOne(
-    $productId,
+    int | string  $productId,
   ): JsonResponse {
 
     $product = $this->productService->findOne($productId);
@@ -71,7 +65,7 @@ class ProductController extends ApiController
   #[IsGranted('ROLE_ADMIN', message: 'You are not permitted to perform this action'), IsGranted('IS_AUTHENTICATED_FULLY')]
   #[Route('/{productId}', name: 'delete_product', methods: ['DELETE'])]
   public function remove(
-    $productId,
+    int | string  $productId,
   ): JsonResponse {
 
     $product = $this->productService->remove($productId);

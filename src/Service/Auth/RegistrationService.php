@@ -25,7 +25,12 @@ class RegistrationService
   }
 
 
-  public function createUser(RegisterUserDto $userDto)
+  /**
+   * Returns an array with 'auth_token' and 'user' keys.
+   *
+   * @return array{auth_token: string, user: User} An  array with 'auth_token' and 'user' of the registered user.
+   */
+  public function createUser(RegisterUserDto $userDto): array
   {
 
     $this->throwIfUserAlreadyExists($userDto->email);
@@ -74,7 +79,7 @@ class RegistrationService
     return ['auth_token' => $authToken, 'user' => $user];
   }
 
-  private function throwIfUserAlreadyExists($userEmail)
+  private function throwIfUserAlreadyExists(string $userEmail): void
   {
     // make sure user with same email does not exist
     $oldUser = $this->userRepository->findOneBy(['email' => $userEmail]);

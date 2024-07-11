@@ -17,11 +17,10 @@ class ProductService
     private readonly ProductRepository $productRepository,
     private readonly EntityManagerInterface $entityManager,
     private readonly LoggerInterface $loggerInterface,
-    private readonly string $uploadDirectory
   ) {
   }
 
-  public function create(CreateProductDto $createProductDto)
+  public function create(CreateProductDto $createProductDto): Product
   {
     try {
 
@@ -50,7 +49,7 @@ class ProductService
   }
 
 
-  public function edit(int $id, EditProductDto $editProductDto)
+  public function edit(int | string $id, EditProductDto $editProductDto): Product
   {
     $product = $this->productRepository->find($id);
 
@@ -65,9 +64,9 @@ class ProductService
 
 
 
-      $product->setName($editProductDto->name ?? $product->name);
+      $product->setName((string)($editProductDto->name ?? $product->name));
       $product->setPrice((float)($editProductDto->price ?? $product->price));
-      $product->setDescription($editProductDto->description ?? $product->description);
+      $product->setDescription((string)($editProductDto->description ?? $product->description));
 
       $this->entityManager->flush();
 
@@ -84,7 +83,7 @@ class ProductService
     }
   }
 
-  public function findOne($id)
+  public function findOne(int | string $id): Product
   {
     $product = $this->productRepository->find($id);
 
@@ -95,12 +94,23 @@ class ProductService
     return $product;
   }
 
-  public function findAll()
+  /**
+   * Returns an array of Product objects.
+   *
+   * @return Product[] An array of Product objects.
+   */
+  public function findAll(): array
   {
     return $this->productRepository->findAll();
   }
 
-  public function remove($id)
+  /**
+   * remove
+   *
+   * @param  int|string $id
+   * @return bool
+   */
+  public function remove(int | string $id): bool
   {
     $product = $this->findOne($id);
 

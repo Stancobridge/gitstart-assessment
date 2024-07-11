@@ -2,14 +2,25 @@
 
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+
 class ApiController extends AbstractController
 {
+  /**
+   * 
+   *
+   * @param string $message
+   * @param mixed $data
+   * @param int $statusCode
+   * @param mixed[] $headers
+   * @return JsonResponse
+   */
   protected function transformResponse(
     string $message,
-    $data = [],
+    mixed $data = [],
     int $statusCode = JsonResponse::HTTP_OK,
     array $headers = []
   ): JsonResponse {

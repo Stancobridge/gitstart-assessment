@@ -1,10 +1,12 @@
 <?php
 
+namespace App\Test\Integration;
+
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ProductControllerTest extends WebTestCase
+class RegisterControllerTest extends WebTestCase
 {
   private KernelBrowser $client;
   const APPLICATION_JSON = 'application/json';

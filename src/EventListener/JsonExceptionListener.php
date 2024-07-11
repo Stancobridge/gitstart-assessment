@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class JsonExceptionListener
 {
-  public function onKernelException(ExceptionEvent $event)
+  public function onKernelException(ExceptionEvent $event): void
   {
     $errorTimestamp = date('Y-m-d H:i:s');
 
