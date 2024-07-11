@@ -60,8 +60,12 @@ run migration
 ```sh
 php bin/console doctrine:migrations:migrate
 ```
+setup jwt hash keys
+```sh
+php bin/console lexik:jwt:generate-keypair
+```
 
-#### Start server
+Start server
 ```sh
 symfony server:start
 ```
