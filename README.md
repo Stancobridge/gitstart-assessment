@@ -62,8 +62,19 @@ php bin/console doctrine:migrations:migrate
 ```
 
 #### Start server
-
+```sh
+symfony server:start
+```
 ## Docker setup
+
+
+#### setup .env
+
+Create an .env file in the root folder and copy the contents of .env.example to it.
+Replace this with the DABASE_URL value
+```sh
+DATABASE_URL=mysql://symfony:secret@db:3306/symfony
+```
 
 Build project
 
