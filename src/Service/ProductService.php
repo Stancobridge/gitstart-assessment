@@ -13,110 +13,99 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductService
 {
-  public function __construct(
-    private readonly ProductRepository $productRepository,
-    private readonly EntityManagerInterface $entityManager,
-    private readonly LoggerInterface $loggerInterface,
-  ) {
-  }
-
-  public function create(CreateProductDto $createProductDto): Product
-  {
-    try {
-
-      $this->entityManager->beginTransaction();
-
-      $product = new Product();
-
-      $product->setName($createProductDto->name);
-      $product->setPrice((float)$createProductDto->price);
-      $product->setDescription($createProductDto->description);
-
-      $this->entityManager->persist($product);
-      $this->entityManager->flush();
-
-      $this->entityManager->commit();
-
-      return $product;
-    } catch (\Exception $e) {
-      $this->loggerInterface->error($e->getMessage());
-
-      $this->entityManager->rollback();
-
-
-      throw new InternalServerHttpException('Error occurred creating product, please try again or reach out to support');
-    }
-  }
-
-
-  public function edit(int | string $id, EditProductDto $editProductDto): Product
-  {
-    $product = $this->productRepository->find($id);
-
-    if (!$product) {
-      throw new NotFoundHttpException('Product not found');
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly LoggerInterface $loggerInterface,
+    ) {
     }
 
-    try {
+    public function create(CreateProductDto $createProductDto): Product
+    {
+        try {
+            $this->entityManager->beginTransaction();
 
-      $this->entityManager->beginTransaction();
+            $product = new Product();
 
+            $product->setName($createProductDto->name);
+            $product->setPrice((float) $createProductDto->price);
+            $product->setDescription($createProductDto->description);
 
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
 
+            $this->entityManager->commit();
 
-      $product->setName((string)($editProductDto->name ?? $product->name));
-      $product->setPrice((float)($editProductDto->price ?? $product->price));
-      $product->setDescription((string)($editProductDto->description ?? $product->description));
+            return $product;
+        } catch (\Exception $e) {
+            $this->loggerInterface->error($e->getMessage());
 
-      $this->entityManager->flush();
+            $this->entityManager->rollback();
 
-      $this->entityManager->commit();
-
-      return $product;
-    } catch (\Exception $e) {
-      $this->loggerInterface->error($e->getMessage());
-
-      $this->entityManager->rollback();
-
-
-      throw new InternalServerHttpException('Error occurred editing product, please try again or reach out to support');
-    }
-  }
-
-  public function findOne(int | string $id): Product
-  {
-    $product = $this->productRepository->find($id);
-
-    if (!$product) {
-      throw new NotFoundHttpException('Product not found');
+            throw new InternalServerHttpException('Error occurred creating product, please try again or reach out to support');
+        }
     }
 
-    return $product;
-  }
+    public function edit(int|string $id, EditProductDto $editProductDto): Product
+    {
+        $product = $this->productRepository->find($id);
 
-  /**
-   * Returns an array of Product objects.
-   *
-   * @return Product[] An array of Product objects.
-   */
-  public function findAll(): array
-  {
-    return $this->productRepository->findAll();
-  }
+        if (!$product) {
+            throw new NotFoundHttpException('Product not found');
+        }
 
-  /**
-   * remove
-   *
-   * @param  int|string $id
-   * @return bool
-   */
-  public function remove(int | string $id): bool
-  {
-    $product = $this->findOne($id);
+        try {
+            $this->entityManager->beginTransaction();
 
-    $this->entityManager->remove($product);
-    $this->entityManager->flush();
+            $product->setName((string) ($editProductDto->name ?? $product->name));
+            $product->setPrice((float) ($editProductDto->price ?? $product->price));
+            $product->setDescription((string) ($editProductDto->description ?? $product->description));
 
-    return true;
-  }
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return $product;
+        } catch (\Exception $e) {
+            $this->loggerInterface->error($e->getMessage());
+
+            $this->entityManager->rollback();
+
+            throw new InternalServerHttpException('Error occurred editing product, please try again or reach out to support');
+        }
+    }
+
+    public function findOne(int|string $id): Product
+    {
+        $product = $this->productRepository->find($id);
+
+        if (!$product) {
+            throw new NotFoundHttpException('Product not found');
+        }
+
+        return $product;
+    }
+
+    /**
+     * Returns an array of Product objects.
+     *
+     * @return Product[] an array of Product objects
+     */
+    public function findAll(): array
+    {
+        return $this->productRepository->findAll();
+    }
+
+    /**
+     * remove.
+     */
+    public function remove(int|string $id): bool
+    {
+        $product = $this->findOne($id);
+
+        $this->entityManager->remove($product);
+        $this->entityManager->flush();
+
+        return true;
+    }
 }

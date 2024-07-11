@@ -4,5 +4,5 @@ namespace App\Enum;
 
 enum Role
 {
-  public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
 }
