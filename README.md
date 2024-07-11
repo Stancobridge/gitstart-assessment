@@ -24,11 +24,6 @@ Any user created after the first one won't have this role and call only view pro
   cd ./gitstart-assessment
 ```
 
-#### install packages
-
-```sh
-  composer install
-```
 
 #### setup .env
 
@@ -40,6 +35,12 @@ DATABASE_URL="mysql://username:password@127.0.0.1:3306/gistart_assessment"
 ```
 
 the username and password should be your local details
+
+#### install packages
+
+```sh
+  composer install
+```
 
 #### Setup database
 
