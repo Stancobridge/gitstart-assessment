@@ -8,3 +8,4 @@ test/
 vendor/
 /var/cache/*
 /var/log/*
+/config/jwt/*.pem

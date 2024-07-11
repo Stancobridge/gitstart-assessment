@@ -1,43 +1,23 @@
-#docker/php
-FROM php:8.2-fpm-buster
-
-WORKDIR /var/www/html
+FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
-    gnupg \
-    g++ \
-    procps \
-    openssl \
-    git \
-    unzip \
-    zlib1g-dev \
-    libzip-dev \
-    libfreetype6-dev \
-    libpng-dev \
-    libjpeg-dev \
-    libicu-dev  \
-    libonig-dev \
-    libxslt1-dev \
-    acl \
-    && echo 'alias sf="php bin/console"' >> ~/.bashrc
+    git zip unzip libpng-dev \
+    libzip-dev default-mysql-client nginx
 
-RUN docker-php-ext-configure gd --with-jpeg --with-freetype 
+RUN docker-php-ext-install pdo pdo_mysql zip gd
 
-RUN docker-php-ext-install \
-    pdo pdo_mysql zip xsl gd intl opcache exif mbstring
+WORKDIR /var/www
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY . /var/www
 
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-COPY . /var/www/html
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install
 
-COPY ./composer.json ./composer.lock ./
+COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Install Symfony dependencies
-RUN composer install --no-scripts --no-autoloader --no-dev
+RUN php bin/console lexik:jwt:generate-keypair
 
-COPY --chown=www-data:www-data . /var/www/html
+EXPOSE 80
 
-EXPOSE 9000
-
-CMD ["php-fpm"]
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]

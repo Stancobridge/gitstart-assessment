@@ -1,4 +1,10 @@
 ## Documentation on how to setup this project
+> This project is a simple Symfony REST API server for product CRUD and the authentication using JWT.
+> The REST API allows user to register, login and manager products through CRUD endpoints. The Documentation below explains how to run and test the project
+
+## Assummption made during development
+Only the first user has ROLE_ADMIN role, which the role of the user who can create, edit and delete products.
+Any user created after the first one won't have this role and call only view products
 
 ### Local setup
 
@@ -7,6 +13,7 @@
 1. **PHP:** version 8.2 and above
 2. **Mysql:** version 8.0 and above
 3. **Composer:** version 2.5.8 and above
+4. **Symfony:** version 2.5.8 and above, follow this link to install symfony https://symfony.com/download
 
 #### Clone this project
 
@@ -52,34 +59,41 @@ run migration
 php bin/console doctrine:migrations:migrate
 ```
 
-run fixtures
-
-```sh
-php bin/console doctrine:fixtures:load
-```
 
 #### Start server
-
 
 ### Docker setup
 
 ## Test Documentation
+
+Edit the database username and password to match with your local database details
+
+```sh
+DATABASE_URL="mysql://username:password@127.0.0.1:3306/gistart_assessment"
+```
+
+the username and password should be your local details
+
 Create database
+
 ```sh
 php bin/console --env=test doctrine:database:create
 ```
 
 Create database schema
+
 ```sh
 php bin/console --env=test doctrine:schema:create
 ```
 
 Create dummy data for testing
+
 ```
 php bin/console --env=test doctrine:fixtures:load
 ```
 
 Run test
+
 ```sh
 php bin/phpunit
 ```
@@ -353,7 +367,6 @@ Replace `{id}` with the ID of the product.
   "timestamp": "2024-07-11 09:50:11"
 }
 ```
-
 
 #### 4. Update a product
 
